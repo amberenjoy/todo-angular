@@ -15,7 +15,6 @@ export class TodoComponent implements OnInit {
     filter: string = 'all';
 
     todos: Array<ITodoItem> = [];
-    data: Array<ITodoItem> = [];
 
     filterItems = [
         { text: 'All', value: 'all' },
@@ -40,22 +39,28 @@ export class TodoComponent implements OnInit {
     }
 
     loadData(): void {
-        this.todoService.getValues().subscribe(data => {
-            this.todos = data.slice(0, 10);
+        if (localStorage.getItem('todos')) {
+            this.todos = JSON.parse(localStorage.getItem('todos') || '');
             this.todos.map((e: ITodoItem) => e.editable = false);
-            this.data = [...this.todos];
-        })
+        } else {
+            this.todoService.getValues().subscribe(data => {
+                this.todos = [...data];
+                this.todos.map((e: ITodoItem) => e.editable = false);
+            })
+        }
     }
 
     onChangeFilter(filterVal: string): void {
+        const originalData = JSON.parse(localStorage.getItem('todos') || '');
+
         this.filter = filterVal;
 
         if (filterVal === 'active') {
-            this.todos = this.data.filter((e: ITodoItem) => !e.completed)
+            this.todos = originalData.filter((e: ITodoItem) => !e.completed)
         } else if (filterVal === 'completed') {
-            this.todos = this.data.filter((e: ITodoItem) => e.completed === true)
+            this.todos = originalData.filter((e: ITodoItem) => e.completed === true)
         } else {
-            this.todos = this.data;
+            this.todos = originalData;
         }
     }
 
@@ -69,6 +74,7 @@ export class TodoComponent implements OnInit {
         }
 
         this.todos.unshift(newItem);
+        this.todoService.updateTodos(this.todos);
         this.newItemTitle = '';
     }
 
@@ -77,7 +83,8 @@ export class TodoComponent implements OnInit {
             if (each === item) {
                 each.completed = !item.completed
             }
-        })
+        });
+        this.todoService.updateTodos(this.todos);
     }
 
     onEditItemTitle(item: ITodoItem): void {
@@ -85,11 +92,13 @@ export class TodoComponent implements OnInit {
     }
 
     confirmUpdateItemTitle(item: ITodoItem): void {
-        this.todos.map(each => each.editable = false)
+        this.todos.map(each => each.editable = false);
+        this.todoService.updateTodos(this.todos);
     }
 
     removeItem(item: ITodoItem): void {
         this.todos = this.todos.filter(each => each !== item);
+        this.todoService.updateTodos(this.todos);
     }
 
 }
