@@ -7,11 +7,13 @@ This project was generated with [Angular CLI](https://github.com/angular/angular
 ## 📦 Stack
 
 - Angular
-- [NG-ZORRO ( antd )](https://ng.ant.design/docs/introduce/en)
+- UI framework: [NG-ZORRO ( antd )](https://ng.ant.design/docs/introduce/en)
 
 ## ✨ Features
 
-<image src="./screens/todo.png" width="400px">
+## <image src="./screens/todo.png" width="400px">
+
+<image src="./screens/todo.gif" width="400px">
 
 ## ⌨️ Development
 
