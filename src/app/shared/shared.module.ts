@@ -4,8 +4,6 @@ import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule, FormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
 
-import { TranslateModule } from '@ngx-translate/core';
-
 import { AntdModule } from './antd.module';
 
 const CORE_MODULES = [
@@ -16,7 +14,6 @@ const CORE_MODULES = [
 ];
 
 const THIRD_MODULES = [
-    TranslateModule,
     AntdModule
 ];
 
